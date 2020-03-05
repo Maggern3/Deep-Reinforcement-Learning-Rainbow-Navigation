@@ -1,0 +1,14 @@
+Observation:
+Running the testrunner multiple times resulted in two exact runs.
+By observation, the behavior of the agent seemed identical between the runs.
+It followed the same path(by performing the same actions) and achieved the same scores
+for the two episodes. Episode 1 in run 1 matched episode 1 in run 2 and the same for the second episode.
+I'm suspecting the first versions of the network/algorithm may suffer from high variance.
+The agent hasn't learned how to find bananas it's learned how to follow good paths that lead to bananas.
+A few potential causes and fixes;
+Perhaps the initial decay of epsilon is too high and it's minimum value is too low 
+so that the agent performs too little initial and continued exploration.
+Increase network size and depth to "hold more data" and allow more advanced strategies to be developed.
+Decrease learning rate.
+This can perhaps also be addressed by bootstrapping the targets with multiple steps
+as in A3C.
