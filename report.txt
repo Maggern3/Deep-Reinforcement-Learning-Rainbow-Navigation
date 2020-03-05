@@ -12,3 +12,5 @@ Increase network size and depth to "hold more data" and allow more advanced stra
 Decrease learning rate.
 This can perhaps also be addressed by bootstrapping the targets with multiple steps
 as in A3C.
+
+The agent may also get stuck between two bananas alternating between going left and right.

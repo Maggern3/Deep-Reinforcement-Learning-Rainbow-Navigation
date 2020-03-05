@@ -16,7 +16,7 @@ training_interval = 4
 
 from dqnagent import DQNAgent
 agent = DQNAgent(observation_state_size, action_space_size)
-agent.network1.load_state_dict(torch.load('checkpoint.pth'))
+agent.network1.load_state_dict(torch.load('checkpoint4.pth'))
 for episode in range(0, 2):
     env_info = env.reset(train_mode=False)[brain_name] # reset the environment
     state = env_info.vector_observations[0]     

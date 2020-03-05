@@ -23,9 +23,10 @@ for episode in range(0, 2000):
        # get the current state
     score = 0                                          # initialize the score
     epsilon = max(epsilon*eps_decay, eps_min)
+    t=0
     while(True):
+        t+=1
         action = agent.select_action(state, epsilon)
-        #action = np.random.randint(4)        # select an action
         env_info = env.step(action)[brain_name]        # send the action to the environment
         next_state = env_info.vector_observations[0]   # get the next state
         reward = env_info.rewards[0]                   # get the reward
@@ -40,7 +41,7 @@ for episode in range(0, 2000):
             break
         
     print("Episode {} Score: {} epsilon {}".format(episode, score, epsilon))
-torch.save(agent.network1.state_dict(), 'checkpoint3.pth')
+torch.save(agent.network1.state_dict(), 'checkpoint4.pth')
 
     #add running mean scores
 

@@ -25,7 +25,8 @@ class DQNAgent:
         states, actions, rewards, next_states, dones = self.select_samples()
         optim = self.optim
         optim.zero_grad()
-        fixed = self.fixednetwork(next_states).detach().max(1)[0].unsqueeze(1)
+        argmax_actions_from_network1 = self.network1(next_states).detach().max(1)[1].unsqueeze(1)
+        fixed = self.fixednetwork(next_states).detach().gather(1, argmax_actions_from_network1)
         q = rewards + gamma * fixed * (1-dones)    
         old_values = self.network1(states).gather(1, actions)
         loss = F.mse_loss(old_values, q)
