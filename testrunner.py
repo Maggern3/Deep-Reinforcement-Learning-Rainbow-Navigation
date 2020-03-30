@@ -17,10 +17,9 @@ training_interval = 4
 from dqnagent import DQNAgent
 agent = DQNAgent(observation_state_size, action_space_size)
 agent.network1.load_state_dict(torch.load('checkpoint4.pth'))
-for episode in range(0, 2):
-    env_info = env.reset(train_mode=False)[brain_name] # reset the environment
-    state = env_info.vector_observations[0]     
-       # get the current state
+for episode in range(0, 200):
+    env_info = env.reset(train_mode=True)[brain_name] # reset the environment
+    state = env_info.vector_observations[0]            # get the current state
     score = 0                                          # initialize the score
     while(True):
         action = agent.select_action(state, 0)
@@ -29,7 +28,7 @@ for episode in range(0, 2):
         reward = env_info.rewards[0]                   # get the reward
         done = env_info.local_done[0]                  # see if episode has finished
         score += reward                                # update the score
-        state = next_state                              # roll over the state to next time step
+        state = next_state                             # roll over the state to next time step
         if done:                                       # exit loop if episode finished
             break
         
