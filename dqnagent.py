@@ -32,7 +32,7 @@ class DQNAgent:
         self.delta_z = (v_max - v_min) / (n_atoms - 1)
         self.n = 3
         self.sampling_alpha = 0.5
-        self.training_start = 10000
+        self.training_start = 100
 
     def z_v(self, n_atoms, v_min, v_max):
         z = []

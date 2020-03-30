@@ -53,3 +53,9 @@ Distributional Double DQN /w multi step bootstrap targets and prioritized experi
 eps_decay = 0.995
 eps_min = 0.01
 buffer_size = 10000
+Episode 994 Score: 2.0 frame 298500 took 43.8 sec sampling_beta 0.997 epsilon 0.0100
+Episode 995 Score: 1.0 frame 298800 took 43.8 sec sampling_beta 0.998 epsilon 0.0100
+Episode 996 Score: 2.0 frame 299100 took 43.7 sec sampling_beta 0.998 epsilon 0.0100
+Episode 997 Score: 5.0 frame 299400 took 43.8 sec sampling_beta 0.999 epsilon 0.0100
+Episode 998 Score: 0.0 frame 299700 took 43.9 sec sampling_beta 0.999 epsilon 0.0100
+Episode 999 Score: 2.0 frame 300000 took 43.8 sec sampling_beta 1.000 epsilon 0.0100
