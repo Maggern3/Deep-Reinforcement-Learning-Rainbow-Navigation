@@ -23,7 +23,7 @@ class DQNAgent:
         self.optim = optim.Adam(self.network1.parameters(), lr=0.0001)
         self.replay_buffer = deque(maxlen=buffer_size)
         self.priorities = deque(maxlen=buffer_size)
-        self.batch_size = 64
+        self.batch_size = 32
         self.tau = 0.001
         self.n_atoms = n_atoms
         self.v_min = v_min
@@ -32,7 +32,7 @@ class DQNAgent:
         self.delta_z = (v_max - v_min) / (n_atoms - 1)
         self.n = 3
         self.sampling_alpha = 0.5
-        self.training_start = 100
+        self.training_start = 10000
 
     def z_v(self, n_atoms, v_min, v_max):
         z = []
@@ -42,6 +42,8 @@ class DQNAgent:
         return z
 
     def train_from_samples_distributional_dqn(self, gamma, n_atoms, v_min, v_max, sampling_beta):
+        self.network1.reset_noise()
+        self.fixednetwork.reset_noise()
         if(len(self.replay_buffer) < self.training_start):
             return
         optim = self.optim
@@ -139,19 +141,13 @@ class DQNAgent:
         weights = torch.tensor([s[6] for s in samples]).float().unsqueeze(1) 
         return indices, states, actions, rewards, next_states, dones, weights
 
-    def select_action(self, state, epsilon):
-        #epsilon greedy policy
-        # random action or greedy action?        
-        greedy = np.random.choice(np.arange(2), p=[1-epsilon, epsilon])
-        if(greedy==0):
-            state = torch.tensor(state).float().unsqueeze(0).to(self.device)
-            self.network1.eval()
-            with torch.no_grad():
-                p = self.network1(state).data.cpu()                
-                q = p * self.atoms
-                action = int(q.sum(2).max(1)[1]) #np.argmax(q_v.numpy(), axis=1))   
-            self.network1.train()                     
-        else:
-            action = np.random.choice(np.arange(self.action_space_size))
+    def select_action(self, state):
+        state = torch.tensor(state).float().unsqueeze(0).to(self.device)
+        #self.network1.eval()
+        with torch.no_grad():
+            p = self.network1(state).data.cpu()                
+            q = p * self.atoms
+            action = int(q.sum(2).max(1)[1]) #np.argmax(q_v.numpy(), axis=1))   
+        #self.network1.train()                     
         return action
 

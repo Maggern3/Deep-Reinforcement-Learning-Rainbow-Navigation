@@ -59,3 +59,79 @@ Episode 996 Score: 2.0 frame 299100 took 43.7 sec sampling_beta 0.998 epsilon 0.
 Episode 997 Score: 5.0 frame 299400 took 43.8 sec sampling_beta 0.999 epsilon 0.0100
 Episode 998 Score: 0.0 frame 299700 took 43.9 sec sampling_beta 0.999 epsilon 0.0100
 Episode 999 Score: 2.0 frame 300000 took 43.8 sec sampling_beta 1.000 epsilon 0.0100
+
+Distributional Double Dueling DQN /w multi step bootstrap targets, prioritized experience replay and noisy linear layers v1:
+buffer_size = 10000
+self.training_start = 1000
+Episode 994 Score: 0.0 frame 298500 took 44.8 sec sampling_beta 0.997 epsilon 0.0100
+Episode 995 Score: 1.0 frame 298800 took 44.7 sec sampling_beta 0.998 epsilon 0.0100
+Episode 996 Score: 0.0 frame 299100 took 44.8 sec sampling_beta 0.998 epsilon 0.0100
+Episode 997 Score: 0.0 frame 299400 took 44.8 sec sampling_beta 0.999 epsilon 0.0100
+Episode 998 Score: 2.0 frame 299700 took 44.8 sec sampling_beta 0.999 epsilon 0.0100
+Episode 999 Score: 1.0 frame 300000 took 45.0 sec sampling_beta 1.000 epsilon 0.0100
+
+Rainbow v2:
+buffer_size = 10000
+self.training_start = 10000
+Episode 652 Score: 0.0 frame 195900 took 44.9 sec sampling_beta 0.792 epsilon 0.0379
+Episode 653 Score: 2.0 frame 196200 took 45.4 sec sampling_beta 0.792 epsilon 0.0377
+Episode 654 Score: 1.0 frame 196500 took 44.9 sec sampling_beta 0.793 epsilon 0.0375
+Episode 655 Score: 0.0 frame 196800 took 44.9 sec sampling_beta 0.794 epsilon 0.0373
+Episode 656 Score: 0.0 frame 197100 took 45.0 sec sampling_beta 0.794 epsilon 0.0371
+Episode 657 Score: 1.0 frame 197400 took 44.8 sec sampling_beta 0.795 epsilon 0.0369
+Episode 658 Score: 0.0 frame 197700 took 45.0 sec sampling_beta 0.795 epsilon 0.0368
+Episode 659 Score: 1.0 frame 198000 took 44.8 sec sampling_beta 0.796 epsilon 0.0366
+Episode 660 Score: 2.0 frame 198300 took 44.7 sec sampling_beta 0.797 epsilon 0.0364
+Episode 661 Score: 0.0 frame 198600 took 44.7 sec sampling_beta 0.797 epsilon 0.0362
+Episode 662 Score: 5.0 frame 198900 took 44.9 sec sampling_beta 0.798 epsilon 0.0360
+Episode 663 Score: -1.0 frame 199200 took 46.9 sec sampling_beta 0.798 epsilon 0.0359
+
+Rainbow v3:
+buffer_size = 20000
+self.training_start = 10000
+Episode 994 Score: 1.0 frame 298500 took 46.5 sec sampling_beta 0.997 epsilon 0.0100
+Episode 995 Score: 0.0 frame 298800 took 46.5 sec sampling_beta 0.998 epsilon 0.0100
+Episode 996 Score: 0.0 frame 299100 took 46.3 sec sampling_beta 0.998 epsilon 0.0100
+Episode 997 Score: 0.0 frame 299400 took 46.4 sec sampling_beta 0.999 epsilon 0.0100
+Episode 998 Score: 4.0 frame 299700 took 46.4 sec sampling_beta 0.999 epsilon 0.0100
+Episode 999 Score: 2.0 frame 300000 took 46.4 sec sampling_beta 1.000 epsilon 0.0100
+
+
+Rainbow v4:
+buffer_size = 20000
+self.training_start = 10000
+batch_size = 32
+
+
+Rainbow v5:
+buffer_size = 50000
+self.training_start = 10000
+batch_size = 32
+neurons = 512
+Episode 994 Score: 12.0 frame 298500 took 32.2 sec sampling_beta 0.997 epsilon 0.0100
+Episode 995 Score: 8.0 frame 298800 took 32.4 sec sampling_beta 0.998 epsilon 0.0100
+Episode 996 Score: 2.0 frame 299100 took 32.4 sec sampling_beta 0.998 epsilon 0.0100
+Episode 997 Score: 0.0 frame 299400 took 32.5 sec sampling_beta 0.999 epsilon 0.0100
+Episode 998 Score: 6.0 frame 299700 took 32.6 sec sampling_beta 0.999 epsilon 0.0100
+Episode 999 Score: 3.0 frame 300000 took 32.5 sec sampling_beta 1.000 epsilon 0.0100
+
+Rainbow v5:
+buffer_size = 20000
+self.training_start = 10000
+batch_size = 32
+modify bootstrap targeting to include current reward
+other pc
+
+Rainbow v6:
+buffer_size = 100000
+self.training_start = 10000
+batch_size = 32
+modify bootstrap targeting to include current reward
+
+
+Rainbow v7:
+buffer_size = 100000
+self.training_start = 10000
+batch_size = 32
+neurons = 512
+
