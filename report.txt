@@ -101,6 +101,12 @@ Rainbow v4:
 buffer_size = 20000
 self.training_start = 10000
 batch_size = 32
+Episode 994 Score: 1.0 frame 298500 took 36.3 sec sampling_beta 0.997 epsilon 0.0100
+Episode 995 Score: 3.0 frame 298800 took 38.8 sec sampling_beta 0.998 epsilon 0.0100
+Episode 996 Score: 5.0 frame 299100 took 38.6 sec sampling_beta 0.998 epsilon 0.0100
+Episode 997 Score: 3.0 frame 299400 took 38.8 sec sampling_beta 0.999 epsilon 0.0100
+Episode 998 Score: 1.0 frame 299700 took 38.8 sec sampling_beta 0.999 epsilon 0.0100
+Episode 999 Score: 0.0 frame 300000 took 34.1 sec sampling_beta 1.000 epsilon 0.0100
 
 
 Rainbow v5:
@@ -115,23 +121,30 @@ Episode 997 Score: 0.0 frame 299400 took 32.5 sec sampling_beta 0.999 epsilon 0.
 Episode 998 Score: 6.0 frame 299700 took 32.6 sec sampling_beta 0.999 epsilon 0.0100
 Episode 999 Score: 3.0 frame 300000 took 32.5 sec sampling_beta 1.000 epsilon 0.0100
 
-Rainbow v5:
-buffer_size = 20000
-self.training_start = 10000
-batch_size = 32
-modify bootstrap targeting to include current reward
-other pc
 
 Rainbow v6:
-buffer_size = 100000
+buffer_size = 50000
 self.training_start = 10000
 batch_size = 32
-modify bootstrap targeting to include current reward
+neurons = 512
+modified bootstrap targeting to include current reward
+Episode 994 Score: 6.0 frame 298500 took 50.2 sec sampling_beta 0.997 epsilon 0.0100
+Episode 995 Score: 3.0 frame 298800 took 50.1 sec sampling_beta 0.998 epsilon 0.0100
+Episode 996 Score: 3.0 frame 299100 took 49.9 sec sampling_beta 0.998 epsilon 0.0100
+Episode 997 Score: 3.0 frame 299400 took 50.1 sec sampling_beta 0.999 epsilon 0.0100
+Episode 998 Score: 2.0 frame 299700 took 50.2 sec sampling_beta 0.999 epsilon 0.0100
+Episode 999 Score: 2.0 frame 300000 took 51.1 sec sampling_beta 1.000 epsilon 0.0100
 
 
-Rainbow v7:
+Rainbow v7(this far):
 buffer_size = 100000
 self.training_start = 10000
 batch_size = 32
 neurons = 512
-
+Episode 2254 Score: 0.0 mean score: 2.1 frame 676500 took 43.0 sec sampling_beta 1.000
+Episode 2255 Score: 2.0 mean score: 2.09 frame 676800 took 44.6 sec sampling_beta 1.000
+Episode 2256 Score: 0.0 mean score: 1.98 frame 677100 took 39.7 sec sampling_beta 1.000
+Episode 2257 Score: 4.0 mean score: 1.99 frame 677400 took 39.3 sec sampling_beta 1.000
+Episode 2258 Score: 0.0 mean score: 1.91 frame 677700 took 39.3 sec sampling_beta 1.000
+Episode 2259 Score: 0.0 mean score: 1.91 frame 678000 took 39.2 sec sampling_beta 1.000
+Episode 2260 Score: 1.0 mean score: 1.92 frame 678300 took 39.4 sec sampling_beta 1.000

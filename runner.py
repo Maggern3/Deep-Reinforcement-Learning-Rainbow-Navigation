@@ -64,8 +64,6 @@ plt.ylabel('Score')
 plt.xlabel('Episode #')
 plt.show()
 
-    #add running mean scores
-
     #performance improvements
     # increase network depth
     # lower lr further, 0.0000625?     
