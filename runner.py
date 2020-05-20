@@ -40,6 +40,7 @@ for episode in range(0, 100000):
         next_state = env_info.vector_observations[0]   # get the next state
         reward = env_info.rewards[0]                   # get the reward
         done = env_info.local_done[0]                  # see if episode has finished
+        reward = max(min(reward, 1), -1)               # reward clipping
         score += reward                                # update the score
         sars = (state, action, reward, next_state, done)
         agent.add(sars)
@@ -64,5 +65,4 @@ plt.show()
 
     # ideas
     # change to log softmax??
-    # reward clipping?
     # reduce tau or target network update? every 32k frames or 8k frames
