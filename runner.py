@@ -12,23 +12,21 @@ brain = env.brains[brain_name]
 observation_state_size = brain.vector_observation_space_size
 action_space_size = brain.vector_action_space_size
 
-eps_decay = 0.995
-eps_min = 0.01
 gamma = 0.99
 training_interval = 4
 n_atoms = 51
 v_min = -10
 v_max = 10
 sampling_beta = 0.4
-sampling_beta_eps = (1 - sampling_beta) / 1000
-buffer_size = 100000
+sampling_beta_eps = (1 - sampling_beta) / (100000 - 66)
+buffer_size = 1000000
 
 from dqnagent import DQNAgent
 agent = DQNAgent(observation_state_size, action_space_size, n_atoms, v_min, v_max, buffer_size)
 scores = []
 last_hundred_scores = deque(maxlen=100)
 frame=0
-for episode in range(0, 3000):
+for episode in range(0, 100000):
     start = time.time()
     env_info = env.reset(train_mode=True)[brain_name] # reset the environment
     state = env_info.vector_observations[0]     
@@ -64,13 +62,7 @@ plt.ylabel('Score')
 plt.xlabel('Episode #')
 plt.show()
 
-    #performance improvements
-    # increase network depth
-    # lower lr further, 0.0000625?     
-    # change to log softmax?
+    # ideas
+    # change to log softmax??
     # reward clipping?
-
-    # increase network size, 512
-    # increase buffer size! 100.000 for lunar lander
-    # modify bootstrap targeting to include current reward?
-    # decrease batch_size?
+    # reduce tau or target network update? every 32k frames or 8k frames

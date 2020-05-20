@@ -9,18 +9,18 @@ class DQNAgent:
     # make two networks, to implement sgd
     def __init__(self, observation_state_size, action_space_size, n_atoms, v_min, v_max, buffer_size):
         gpu = torch.cuda.is_available()
-        if(gpu):
-            print('GPU/CUDA works! Happy fast training :)')
-            torch.cuda.current_device()
-            torch.cuda.empty_cache()
-            self.device = torch.device("cuda")
-        else:
-            print('training on cpu...')
-            self.device = torch.device("cpu")
+        # if(gpu):
+        #     print('GPU/CUDA works! Happy fast training :)')
+        #     torch.cuda.current_device()
+        #     torch.cuda.empty_cache()
+        #     self.device = torch.device("cuda")
+        # else:
+        #     print('training on cpu...')
+        self.device = torch.device("cpu")
         self.network1 = DeepQNetwork(observation_state_size, action_space_size, n_atoms).to(self.device)
         self.fixednetwork = DeepQNetwork(observation_state_size, action_space_size, n_atoms).to(self.device)# copy from network 1, hmmmm, copy all weights??
         self.action_space_size = action_space_size
-        self.optim = optim.Adam(self.network1.parameters(), lr=0.0001)
+        self.optim = optim.Adam(self.network1.parameters(), lr=0.0000625, eps=1.5e-4)
         self.replay_buffer = deque(maxlen=buffer_size)
         self.priorities = deque(maxlen=buffer_size)
         self.batch_size = 32
@@ -32,7 +32,8 @@ class DQNAgent:
         self.delta_z = (v_max - v_min) / (n_atoms - 1)
         self.n = 3
         self.sampling_alpha = 0.5
-        self.training_start = 10000
+        self.training_start = 20000
+        self.fixed_network_update(1.0)
 
     def z_v(self, n_atoms, v_min, v_max):
         z = []
@@ -43,7 +44,7 @@ class DQNAgent:
 
     def train_from_samples_distributional_dqn(self, gamma, n_atoms, v_min, v_max, sampling_beta):
         self.network1.reset_noise()
-        self.fixednetwork.reset_noise()
+        #self.fixednetwork.reset_noise()
         if(len(self.replay_buffer) < self.training_start):
             return
         optim = self.optim
@@ -92,10 +93,10 @@ class DQNAgent:
         self.save_probabilities(indices, p_loss.sum(1).detach().cpu().numpy())
         self.fixed_network_update()
 
-    def fixed_network_update(self):
+    def fixed_network_update(self, tau=0.001):
         # copy weights from network1
         for network1_param, fixed_param in zip(self.network1.parameters(), self.fixednetwork.parameters()):
-            fixed_param.data.copy_(self.tau * network1_param.data + (1.0-self.tau) * fixed_param.data)
+            fixed_param.data.copy_(tau * network1_param.data + (1.0-tau) * fixed_param.data)
 
     def add(self, sars):
         self.replay_buffer.append(sars)        
@@ -115,31 +116,40 @@ class DQNAgent:
         valid_buffer_length = len(self.replay_buffer)-self.n
         p_k = np.array(self.priorities)[0:valid_buffer_length]
         sampling_probabilities = p_k / p_k.sum()
-        for i in range(0, self.batch_size):
-            selection = np.random.choice(valid_buffer_length, p=sampling_probabilities)
-            state, action, reward, next_state, done = self.replay_buffer[selection]
-            weight = ((1/len(p_k))*(1/sampling_probabilities[selection])) ** sampling_beta
-            reward = 0
-            steps = []
-            for k in range(0, self.n):                
-                #print('idx ',selection+k+1)
-                ns = self.replay_buffer[selection+k+1]
-                if(ns[4]==1): # if the selected next n-state is the final state
-                    steps.append(0)
-                else:
-                    steps.append(ns[2])  
-            for k in range(0, self.n):
-                reward += (gamma ** k) * steps[k]
-            #print(reward)
-            samples.append((selection, state, action, reward, next_state, done, weight))
+        while(len(samples) != self.batch_size):
+            self.make_sample(samples, valid_buffer_length, sampling_probabilities, p_k, gamma, sampling_beta)
+        #print(len(samples))
         indices = [s[0] for s in samples]
-        states = torch.tensor([s[1] for s in samples]).float().to(self.device)
+        states = torch.tensor([s[1] for s in samples]).float().to(self.device)        
         actions = torch.tensor([s[2] for s in samples]).long().unsqueeze(1).to(self.device)
         rewards = torch.tensor([s[3] for s in samples]).float().unsqueeze(1)#.to(self.device)
-        next_states = torch.tensor([s[4] for s in samples]).float().to(self.device)
-        dones = torch.tensor([s[5] for s in samples]).float().unsqueeze(1)#.to(self.device)
+        next_states = torch.tensor([s[4] for s in samples]).float().to(self.device)      
+        dones = torch.tensor([s[5] for s in samples]).float().unsqueeze(1)#.to(self.device)        
         weights = torch.tensor([s[6] for s in samples]).float().unsqueeze(1) 
         return indices, states, actions, rewards, next_states, dones, weights
+    
+    def make_sample(self, samples, valid_buffer_length, sampling_probabilities, p_k, gamma, sampling_beta):
+        selection = np.random.choice(valid_buffer_length, p=sampling_probabilities)
+        state, action, reward, next_state, done = self.replay_buffer[selection]
+        weight = ((1/len(p_k))*(1/sampling_probabilities[selection])) ** sampling_beta
+        reward = 0
+        next_state, _, _, _, _ = self.replay_buffer[selection+self.n]
+        #next_state = 
+        steps = []
+        #print('selection ',selection)   
+        for k in range(0, self.n):                             
+            #print('idx ',selection+k)
+            ns = self.replay_buffer[selection+k]
+            if(ns[4]==1): # if the selected next n-state is the final state
+                steps.append(0)
+                return #print('crap')
+            else:
+                steps.append(ns[2])
+                #print(ns[2]) 
+        for k in range(0, self.n):
+            reward += (gamma ** k) * steps[k]
+        #print(reward)
+        samples.append((selection, state, action, reward, next_state, done, weight))
 
     def select_action(self, state):
         state = torch.tensor(state).float().unsqueeze(0).to(self.device)
