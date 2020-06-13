@@ -14,7 +14,7 @@ class DQNAgent:
         self.optim = optim.Adam(self.network1.parameters(), lr=0.001)
         self.replay_buffer = deque(maxlen=10000)
         self.batch_size = 64
-        self.tau = 0.001
+        self.fixed_network_update(1.0)
 
     def add(self, sars):
         self.replay_buffer.append(sars)
@@ -34,11 +34,10 @@ class DQNAgent:
         optim.step()        
         self.fixed_network_update()
 
-    def fixed_network_update(self):
-        #TODO implement update of fixed network weights
+    def fixed_network_update(self, tau=0.001):
         # copy weights from network1
         for network1_param, fixed_param in zip(self.network1.parameters(), self.fixednetwork.parameters()):
-            fixed_param.data.copy_(self.tau * network1_param.data + (1.0-self.tau) * fixed_param.data)
+            fixed_param.data.copy_(tau * network1_param.data + (1.0-tau) * fixed_param.data)
 
     def select_samples(self):
         samples = []

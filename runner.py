@@ -1,6 +1,8 @@
 from unityagents import UnityEnvironment
 import numpy as np
 import torch
+from collections import deque
+import matplotlib.pyplot as plt
 
 env = UnityEnvironment(file_name="Banana_Windows_x86_64/Banana.exe")
 brain_name = env.brain_names[0]
@@ -16,8 +18,9 @@ training_interval = 4
 
 from dqnagent import DQNAgent
 agent = DQNAgent(observation_state_size, action_space_size)
-
-for episode in range(0, 2000):
+scores = []
+last_hundred_scores = deque(maxlen=100)
+for episode in range(0, 1000):
     env_info = env.reset(train_mode=True)[brain_name] # reset the environment
     state = env_info.vector_observations[0]     
        # get the current state
@@ -39,10 +42,17 @@ for episode in range(0, 2000):
         state = next_state                             # roll over the state to next time step
         if done:                                       # exit loop if episode finished
             break
-        
-    print("Episode {} Score: {} epsilon {}".format(episode, score, epsilon))
+    
+    scores.append(score)
+    last_hundred_scores.append(score)
+    print("Episode {} Score: {} mean score: {} epsilon {}".format(episode, score, np.mean(last_hundred_scores), epsilon))
 torch.save(agent.network1.state_dict(), 'checkpoint4.pth')
-
+fig = plt.figure()
+ax = fig.add_subplot(111)
+plt.plot(np.arange(len(scores)), scores)
+plt.ylabel('Score')
+plt.xlabel('Episode #')
+plt.show()
     #add running mean scores
 
     #performance improvements
